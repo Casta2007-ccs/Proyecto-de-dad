@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LinkedInOrInterpolClone")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7894db97ff8fb61e25ecf32eafb85013dc9ee1b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("LinkedInOrInterpolClone")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LinkedInOrInterpolClone")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

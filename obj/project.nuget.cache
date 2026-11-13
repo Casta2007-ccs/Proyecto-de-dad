@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PxMScvtHJUM=",
+  "dgSpecHash": "0OCpJkeUK8Y=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ivana\\source\\repos\\LinkedInOrInterpolClone\\LinkedInOrInterpolClone.csproj",
+  "projectFilePath": "C:\\Users\\ivana\\Documents\\GitHub\\Proyecto-de-dad\\LinkedInOrInterpolClone.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ivana\\.nuget\\packages\\opencvsharp4\\4.13.0.20260627\\opencvsharp4.4.13.0.20260627.nupkg.sha512",
     "C:\\Users\\ivana\\.nuget\\packages\\opencvsharp4.runtime.win\\4.13.0.20260627\\opencvsharp4.runtime.win.4.13.0.20260627.nupkg.sha512"
