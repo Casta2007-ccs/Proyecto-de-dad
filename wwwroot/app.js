@@ -19,7 +19,9 @@ const el = {
   hudCamFps: $('hudCamFps'), hudDetFps: $('hudDetFps'), hudLatency: $('hudLatency'), hudAngle: $('hudAngle'),
   face: $('btnFaceControl'), scan: $('btnScan'), scanResult: $('scanResult'), toast: $('toast'),
   summary: $('summary'), sumRank: $('summaryRank'), sumPoints: $('sumPoints'), sumAccuracy: $('sumAccuracy'),
-  sumStreak: $('sumStreak'), sumRecord: $('sumRecord')
+  sumStreak: $('sumStreak'), sumRecord: $('sumRecord'),
+  scoreName: $('scoreName'), saveScore: $('btnSaveScore'), scoreStatus: $('scoreStatus'),
+  leaderboardBody: $('leaderboardBody')
 };
 const modeButtons = document.querySelectorAll('.segmented [data-mode]');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -101,7 +103,9 @@ function renderStats() {
 
 function renderRoundLabel() {
   const n = Math.min(state.total + 1, MATCH_ROUNDS);
-  el.roundLabel.textContent = state.mode === 'match' ? `Ronda ${n}/${MATCH_ROUNDS}` : `Ronda ${state.total + 1}`;
+  el.roundLabel.textContent = state.mode === 'match'
+    ? `Ronda ${n} / ${MATCH_ROUNDS}`
+    : `Ronda ${state.total + 1}`;
 }
 
 function setChoicesEnabled(on) { el.btnLi.disabled = el.btnIn.disabled = !on; }
@@ -283,6 +287,9 @@ function rankFor(acc) {
 
 function showSummary() {
   stopTimer();
+
+
+
   const acc = state.total ? Math.round(state.score / state.total * 100) : 0;
   el.sumRank.textContent = rankFor(acc);
   el.sumPoints.textContent = state.points;
@@ -290,6 +297,14 @@ function showSummary() {
   el.sumStreak.textContent = state.maxStreak;
   el.sumRecord.textContent = state.points >= state.bestPoints && state.points > 0
     ? '¡Nuevo récord personal!' : `Récord: ${state.bestPoints} puntos`;
+
+  el.scoreName.value = '';
+  el.scoreName.disabled = false;
+  el.saveScore.disabled = false;
+  el.scoreStatus.textContent = '';
+
+  loadLeaderboard();
+
   sfx.end();
   if (!el.summary.open) el.summary.showModal();
 }
@@ -563,3 +578,78 @@ setChoicesEnabled(false);
 renderStats();
 initCamera();
 nextRound();
+
+function renderLeaderboard(scores) {
+  if (!scores.length) {
+    el.leaderboardBody.innerHTML = '<tr><td colspan="4">Todavía no hay puntuaciones.</td></tr>';
+    return;
+  }
+
+  el.leaderboardBody.innerHTML = scores.map((score, index) => {
+    const playerName = score.playerName ?? score.PlayerName ?? 'Anónimo';
+    const points = score.points ?? score.Points ?? 0;
+    const accuracy = score.accuracy ?? score.Accuracy ?? 0;
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${escapeHtml(playerName)}</td>
+        <td class="num">${points}</td>
+        <td class="num">${accuracy}%</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function loadLeaderboard() {
+  el.leaderboardBody.innerHTML = '<tr><td colspan="4">Cargando puntuaciones…</td></tr>';
+
+  try {
+    const response = await fetch('/api/leaderboard');
+    if (!response.ok) throw new Error(response.status);
+
+    renderLeaderboard(await response.json());
+  } catch {
+    el.leaderboardBody.innerHTML =
+      '<tr><td colspan="4">No se pudo cargar el ranking.</td></tr>';
+  }
+}
+
+async function saveScore() {
+  const playerName = el.scoreName.value.trim();
+
+  if (!playerName) {
+    el.scoreStatus.textContent = 'Escribe un nombre para guardar la puntuación.';
+    el.scoreName.focus();
+    return;
+  }
+
+  el.saveScore.disabled = true;
+  el.scoreStatus.textContent = 'Guardando puntuación…';
+
+  try {
+    const response = await fetch('/api/scores', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        playerName,
+        points: state.points,
+        accuracy: state.total ? Math.round(state.score / state.total * 100) : 0,
+        maxStreak: state.maxStreak
+      })
+    });
+
+    if (!response.ok) throw new Error(response.status);
+
+    const data = await response.json();
+    renderLeaderboard(data.leaderboard ?? []);
+    el.scoreName.disabled = true;
+    el.scoreStatus.textContent = 'Puntuación guardada correctamente.';
+  } catch {
+    el.saveScore.disabled = false;
+    el.scoreStatus.textContent =
+      'No se pudo guardar la puntuación. Inténtalo de nuevo.';
+  }
+}
+
+el.saveScore.addEventListener('click', saveScore);
