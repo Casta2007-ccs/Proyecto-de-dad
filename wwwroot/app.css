@@ -203,6 +203,85 @@ dialog h2 { margin: 0 0 .3rem; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+.score-form {
+  display: grid;
+  gap: .5rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.score-form label {
+  color: var(--muted);
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.score-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+}
+
+.score-form input::placeholder {
+  color: var(--muted);
+}
+
+.score-form .btn {
+  width: 100%;
+}
+
+.leaderboard {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.leaderboard h3 {
+  margin: 0 0 .5rem;
+  text-align: center;
+}
+
+.leaderboard-scroll {
+  overflow-x: auto;
+}
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: .45rem .35rem;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+
+.leaderboard th:first-child,
+.leaderboard td:first-child {
+  text-align: center;
+}
+
+.leaderboard th:nth-child(2),
+.leaderboard td:nth-child(2) {
+  max-width: 130px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard th {
+  color: var(--muted);
+  font-size: .7rem;
+  text-transform: uppercase;
+}
+
 @keyframes sheen { to { background-position: -200% 0; } }
 @keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
 @keyframes bump { 50% { transform: scale(1.25); } }

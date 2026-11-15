@@ -93,12 +93,43 @@
 <dialog id="summary" aria-labelledby="summaryTitle">
   <h2 id="summaryTitle">Fin de la partida</h2>
   <p class="rank" id="summaryRank"></p>
+
   <div class="summary-grid">
     <div><b id="sumPoints" class="num">0</b><span>Puntos</span></div>
     <div><b id="sumAccuracy" class="num">0%</b><span>Precisión</span></div>
     <div><b id="sumStreak" class="num">0</b><span>Mejor racha</span></div>
   </div>
+
   <p class="hint" id="sumRecord"></p>
+
+  <div class="score-form">
+    <label for="scoreName">Nombre del jugador</label>
+    <input id="scoreName" type="text" maxlength="25" autocomplete="name" placeholder="Tu nombre">
+    <button class="btn btn-li" type="button" id="btnSaveScore">Guardar puntuación</button>
+    <p class="hint" id="scoreStatus" aria-live="polite"></p>
+  </div>
+
+  <section class="leaderboard" aria-labelledby="leaderboardTitle">
+    <h3 id="leaderboardTitle">Top 10</h3>
+    <div class="leaderboard-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Jugador</th>
+            <th scope="col">Puntos</th>
+            <th scope="col">Precisión</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr>
+            <td colspan="4">Cargando puntuaciones…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <div class="summary-actions">
     <button class="btn btn-li" type="button" id="btnPlayAgain">Jugar otra partida</button>
     <button class="btn btn-next" type="button" id="btnFreeMode">Modo libre</button>
