@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<meta name="color-scheme" content="dark">
+<title>LinkedIn o Interpol</title>
+<link rel="stylesheet" href="app.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <h1><span class="li">LinkedIn</span> o <span class="in">Interpol</span></h1>
+
+  <div class="toolbar">
+    <div class="segmented" role="group" aria-label="Modo de juego">
+      <button type="button" data-mode="free" aria-pressed="true">Libre</button>
+      <button type="button" data-mode="match" aria-pressed="false">Partida de 10</button>
+    </div>
+    <button type="button" class="icon-btn" id="btnSound" aria-pressed="true" aria-label="Sonido">🔊</button>
+  </div>
+
+  <div class="stats" role="group" aria-label="Estadísticas de la partida">
+    <div class="stat stat-main"><b id="points" class="num">0</b><span>Puntos</span></div>
+    <div class="stat"><b id="score" class="num">0</b><span>Aciertos</span></div>
+    <div class="stat"><b id="accuracy" class="num">–</b><span>Precisión</span></div>
+    <div class="stat"><b id="streak" class="num">0</b><span>Racha</span></div>
+    <div class="stat"><b id="best" class="num">0</b><span>Récord</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="card" aria-labelledby="gameTitle">
+    <div class="round-bar">
+      <h2 id="gameTitle">¿LinkedIn o Interpol?</h2>
+      <span class="round-label num" id="roundLabel">Ronda 1</span>
+    </div>
+    <div class="timer" id="timer" hidden aria-hidden="true">
+      <div class="timer-fill" id="timerFill"></div>
+      <span class="timer-text num" id="timerText">10</span>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filtros de imagen">
+      <label class="chip"><input type="checkbox" id="chkGray"> Blanco y negro</label>
+      <label class="chip"><input type="checkbox" id="chkBlur"> Desenfoque</label>
+      <span class="profiles-count"><b id="totalProfiles" class="num">–</b> perfiles</span>
+    </div>
+
+    <div class="portrait-wrap is-loading" id="portraitWrap">
+      <img id="portrait" width="400" height="400" alt="Retrato de la ronda actual" decoding="async" draggable="false">
+      <div class="skeleton" aria-hidden="true"></div>
+      <div class="reveal" id="reveal" aria-hidden="true"></div>
+      <div class="pop num" id="pop" aria-hidden="true"></div>
+    </div>
+
+    <div class="choices">
+      <button class="btn btn-li" id="btnLi" type="button">← LinkedIn</button>
+      <button class="btn btn-in" id="btnIn" type="button">Interpol →</button>
+    </div>
+    <button class="btn btn-voice" id="btnVoice" type="button" aria-pressed="false">🎙️ Activar comandos de voz</button>
+    <p class="voice-status" id="voiceStatus" role="status" aria-live="polite" hidden></p>
+    <p class="hint">Teclas <kbd>←</kbd> <kbd>→</kbd> · <kbd>Enter</kbd> siguiente · desliza o di «LinkedIn» / «Interpol»</p>
+
+    <p id="feedback" role="status" aria-live="polite"></p>
+    <button class="btn btn-next" id="nextBtn" type="button" hidden>Siguiente ronda →</button>
+    <ol class="history" id="history" aria-label="Últimos resultados"></ol>
+  </section>
+
+  <section class="card" aria-labelledby="camTitle">
+    <h2 id="camTitle">Cámara y control facial</h2>
+    <video id="webcam" autoplay playsinline muted></video>
+
+    <div class="cam-wrap">
+      <canvas id="camPreview" width="480" height="360" aria-label="Vista previa de la cámara" role="img"></canvas>
+      <div class="cam-off" id="camOff" hidden>Cámara no disponible. Puedes jugar con los botones, el teclado o deslizando.</div>
+      <div class="hud" aria-hidden="true">
+        Cámara <b id="hudCamFps" class="num">0</b> FPS · Detección <b id="hudDetFps" class="num">0</b> FPS<br>
+        Latencia <b id="hudLatency" class="num">0</b>&nbsp;ms · <b id="hudAngle">Frontal</b>
+      </div>
+      <div class="hold" aria-hidden="true"><div class="hold-fill" id="holdBar"></div></div>
+    </div>
+
+    <div class="cam-actions">
+      <button class="btn btn-face" id="btnFaceControl" type="button" aria-pressed="false">Activar control facial</button>
+      <button class="btn btn-scan" id="btnScan" type="button">Escanear mi cara y añadirme</button>
+    </div>
+    <p class="hint">Mueve la cabeza a la izquierda para LinkedIn o a la derecha para Interpol y mantén la postura un instante.</p>
+
+    <div id="scanResult" aria-live="polite"></div>
+  </section>
+</main>
+
+<dialog id="summary" aria-labelledby="summaryTitle">
+  <h2 id="summaryTitle">Fin de la partida</h2>
+  <p class="rank" id="summaryRank"></p>
+
+  <div class="summary-grid">
+    <div><b id="sumPoints" class="num">0</b><span>Puntos</span></div>
+    <div><b id="sumAccuracy" class="num">0%</b><span>Precisión</span></div>
+    <div><b id="sumStreak" class="num">0</b><span>Mejor racha</span></div>
+  </div>
+
+  <p class="hint" id="sumRecord"></p>
+
+  <div class="score-form">
+    <label for="scoreName">Nombre del jugador</label>
+    <input id="scoreName" type="text" maxlength="25" autocomplete="name" placeholder="Tu nombre">
+    <button class="btn btn-li" type="button" id="btnSaveScore">Guardar puntuación</button>
+    <p class="hint" id="scoreStatus" aria-live="polite"></p>
+  </div>
+
+  <section class="leaderboard" aria-labelledby="leaderboardTitle">
+    <h3 id="leaderboardTitle">Top 10</h3>
+    <div class="leaderboard-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Jugador</th>
+            <th scope="col">Puntos</th>
+            <th scope="col">Precisión</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr>
+            <td colspan="4">Cargando puntuaciones…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="summary-actions">
+    <button class="btn btn-li" type="button" id="btnPlayAgain">Jugar otra partida</button>
+    <button class="btn btn-next" type="button" id="btnFreeMode">Modo libre</button>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,9 +1,8 @@
 @echo off
-title LinkedIn o Interpol - OpenCV Edition
+title LinkedIn o Interpol - Web Edition (C# + OpenCV)
 echo ===================================================
-echo     Iniciando LinkedIn o Interpol (C# + OpenCV)
+echo     Iniciando LinkedIn o Interpol (Web C# + OpenCV)
 echo ===================================================
 cd /d "%~dp0"
-start http://localhost:5117
-dotnet run --launch-profile http
+dotnet run --project src\Backend.Web\LinkedInOrInterpolClone.csproj --launch-profile http
 pause

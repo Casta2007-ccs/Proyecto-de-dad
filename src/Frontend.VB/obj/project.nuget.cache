@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "khmXZKn6/f0=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ivana\\Documents\\GitHub\\Proyecto-de-dad\\src\\Frontend.VB\\LinkedInOrInterpolVB.vbproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ivana\\.nuget\\packages\\opencvsharp4\\4.13.0.20261107\\opencvsharp4.4.13.0.20261107.nupkg.sha512",
+    "C:\\Users\\ivana\\.nuget\\packages\\opencvsharp4.runtime.win\\4.13.0.20261107\\opencvsharp4.runtime.win.4.13.0.20261107.nupkg.sha512",
+    "C:\\Users\\ivana\\.nuget\\packages\\system.speech\\11.0.0\\system.speech.11.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
